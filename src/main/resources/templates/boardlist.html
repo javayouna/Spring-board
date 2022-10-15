@@ -32,7 +32,13 @@
 
 </tbody>
   </table>
+  <a th:href="@{/board/list(page=${0})}"><<</a>
+  <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+    <a th:if="${page != nowPage}" th:href="@{/board/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+    <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+  </th:block>
+  <!--<a th:href="@{/board/list(page=${lastendPage})}">>></a>-->
 </div>
-
+<a href="/board/write">글 작성</a>
 </body>
 </html>
