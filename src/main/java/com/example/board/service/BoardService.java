@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BoardService {
@@ -16,8 +19,19 @@ public class BoardService {
 
 
     //글작성
-    public void write(Board board){
-        boardRepository.save(board);
+    public void write(Board board, MultipartFile file) throws  Exception{
+        //저장경로
+         String projectPath=System.getProperty("user.dir")
+                 +"\\src\\main\\resources\\static\\files";
+        //랜덤함수
+         UUID uuid=UUID.randomUUID();
+         //파일이름
+        String fileName=uuid+"_"+file.getOriginalFilename();
+         File saveFile = new File(projectPath,fileName);
+         file.transferTo(saveFile);
+         board.setFilename(fileName);
+         board.setFilepath("/files/"+fileName);
+         boardRepository.save(board);
 
     }
     //리스트

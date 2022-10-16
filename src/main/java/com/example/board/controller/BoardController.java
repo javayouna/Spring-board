@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.example.board.service.BoardService;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
@@ -27,8 +28,8 @@ public class BoardController {
     }
     //게시판 글 전송
     @PostMapping("/board/writepro") // http://localhost:8080/board/write
-    public String boardWritePro(Board board,Model model){
-        boardService.write(board);
+    public String boardWritePro(Board board, Model model, MultipartFile file) throws Exception{
+        boardService.write(board,file);
 
         model.addAttribute("message","글 작성이 완료되었습니다.");
         //model.addAttribute("message","글 작성이 실패하였습니다.");
@@ -75,11 +76,11 @@ public class BoardController {
 
     //게시글 업데이트
     @PostMapping("/board/update/{id}")
-    public String boardUpdate(@PathVariable("id") Integer id,Board board, Model model){
-        Board boardTemp=boardService.boardView(id); //기존 글 보여주지
+    public String boardUpdate(@PathVariable("id") Integer id,Board board, Model model,MultipartFile file) throws Exception{
+        Board boardTemp=boardService.boardView(id); //기존 글 보여주기
         boardTemp.setTitle(board.getTitle()); //제목
         boardTemp.setContent(board.getContent()); //내용
-        boardService.write(boardTemp);
+        boardService.write(boardTemp,file);
 
         model.addAttribute("message","글 수정이 완료되었습니다.");
         //model.addAttribute("message","글 작성이 실패하였습니다.");
